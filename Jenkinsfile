@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -5,19 +6,23 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the application...'
+                bat 'dir'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Testing the application...'
-                bat 'type index.html'
+                bat 'if exist index.html (echo Test passed: index.html exists) else (echo Test failed & exit /b 1)'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying the application...'
+                bat 'if not exist deployment mkdir deployment'
+                bat 'copy /Y index.html deployment\\index.html'
+                echo 'Application deployed successfully!'
             }
         }
     }
